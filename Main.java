@@ -1,36 +1,45 @@
 public class Main {
-
-
-
-
     public static void main(String[] args) {
-        WeightedGraph<String> graph = new WeightedGraph<>(true);
+        // Create the weighted graph
+        WeightedGraph<String> graph = new WeightedGraph<>();
 
-        graph.addEdge("Almaty", "Astana", 2.1);
-        graph.addEdge("Almaty", "Shymkent", 7.2);
-        graph.addEdge("Shymkent", "Astana", 3.9);
-        graph.addEdge("Astana", "Kostanay", 3.5);
-        graph.addEdge("Shymkent", "Kyzylorda", 5.4);
+        // Create vertices
+        Vertex<String> v1 = new Vertex<>("A");
+        Vertex<String> v2 = new Vertex<>("B");
+        Vertex<String> v3 = new Vertex<>("C");
+        Vertex<String> v4 = new Vertex<>("D");
+        Vertex<String> v5 = new Vertex<>("E");
 
-        System.out.println("Dijkstra:");
-        Search<String> djk = new DijkstraSearch<>(graph, "Almaty");
-        outputPath(djk, "Kyzylorda");
+        // Add vertices to the graph
+        graph.addVertex(v1);
+        graph.addVertex(v2);
+        graph.addVertex(v3);
+        graph.addVertex(v4);
+        graph.addVertex(v5);
 
-//        System.out.println("DFS:");
-//        Search<String> dfs = new DepthFirstSearch<>(graph, "Almaty");
-//        outputPath(dfs, "Kyzylorda");
-//
-//        System.out.println("\n--------------------------------");
-//
-//        System.out.println("BFS:");
-//        Search<String> bfs = new BreadthFirstSearch<>(graph, "Almaty");
-//        outputPath(bfs, "Kyzylorda");
-    }
+        // Add edges with weights
+        graph.addEdge(v1, v2, 2.0);
+        graph.addEdge(v1, v3, 4.0);
+        graph.addEdge(v2, v3, 1.0);
+        graph.addEdge(v2, v4, 7.0);
+        graph.addEdge(v3, v4, 3.0);
+        graph.addEdge(v3, v5, 5.0);
+        graph.addEdge(v4, v5, 2.0);
 
-    public static void outputPath(Search<String> search, String key) {
-        for (String v : search.pathTo(key)) {
-            System.out.print(v + " -> ");
+        // Perform BFS
+        System.out.println("BFS:");
+        BreadthFirstSearch<String> bfs = new BreadthFirstSearch<>(graph);
+        bfs.search(v1);
+
+        // Reset vertices for Dijkstra's algorithm
+        for (Vertex<String> vertex : graph.getVertices()) {
+            vertex.setMinDistance(Double.POSITIVE_INFINITY);
+            vertex.setPreviousVertex(null);
         }
+
+        // Perform Dijkstra's algorithm
+        System.out.println("\nDijkstra's Algorithm:");
+        DijkstraSearch<String> dijkstra = new DijkstraSearch<>(graph);
+        dijkstra.search(v1);
     }
 }
-
